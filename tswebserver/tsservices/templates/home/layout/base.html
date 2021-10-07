@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% load static %}
+    <link rel="icon" type="image/png" href="{% static "home/img/myico.jpg" %}">
+    {% load static %}
+    <script src="{% static "home/js/static.js" %}"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "home/css/bootstrap.min.css" %}">
+    {% load static %}
+    <script type="text/javascript" src="{% static "home/chart/chart.min.js" %}"></script>
+       
+
+    <title>Django TS</title>
+</head>
+
+<body class="container mt-5 bg-dark ">
+    {%include "./navbar.html" %}
+    
+    {% block content %}
+
+    {% endblock content %}
+</body>
+
+
+
+</html>

@@ -1,0 +1,26 @@
+# PRECAUTION: avoid production dependencies that aren't in development
+
+-r base.txt
+
+gunicorn==20.1.0  # https://github.com/benoitc/gunicorn
+sentry-sdk==1.1.0  # https://github.com/getsentry/sentry-python
+
+# Django
+# ------------------------------------------------------------------------------
+django-storages[google]==1.11.1  # https://github.com/jschneier/django-storages
+
+# Cloud GCP
+# ------------------------------------------------------------------------------
+google-auth==1.29.0
+google-cloud==0.34.0
+google-cloud-core==1.6.0
+google-cloud-error-reporting==1.1.2
+google-cloud-logging==2.3.1
+google-cloud-secret-manager==2.1.0
+google-cloud-storage==1.38.0
+google-crc32c==1.1.2
+google-resumable-media==1.2.0
+googleapis-common-protos==1.53.0
+grpc-google-iam-v1==0.12.3
+grpcio==1.37.0
+

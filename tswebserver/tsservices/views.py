@@ -37,8 +37,6 @@ class ForescastApiView(ViewSet):
         income.is_valid(raise_exception=True)
         before, prediction = self.forecast_model.forecast(income.data.get('id_articulo'),
                                                 income.data.get('t_ahead'))
-        print(prediction)
-        print(before)
         # TODO: Create a function to calculate the forecast
         return Response({"before":before, "pred":prediction}, status=status.HTTP_200_OK)
 

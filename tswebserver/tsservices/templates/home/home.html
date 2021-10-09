@@ -8,12 +8,30 @@
     <div class="card-body">
         <h2 class="card-title ">Welcome</h2>
         <p class="card-text">Time Series Web Server</p>
-        <div class="p-2">
-            <a href="https://google.com" class="btn btn-primary">Google</a>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <a href="#" class="btn btn-danger" onclick="clean_graph()" > x Clear</a>
+                </div>  
+            </div>
+            <div class="col">
+                <div>
+                    <a href="#" class="btn btn-success" onclick="add_data_to_graph()" >+ Serie</a>
+                </div>    
+            </div>
+            <div class="col">
+                <label for="exampleFormControlSelect1">T-Ahead</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                </select>
+            </div>
+            
         </div>
-        <div>
-            <a href="#" class="btn btn-success" onclick="Drawgraphonfront()" >Graph</a>
-        </div>
+
+        
+        
         <!-- <div>
             <input type = "button" onclick = "Drawgraphonfront()" value = "Display">  
         </div> -->
@@ -26,11 +44,10 @@
     <div class="row">
         <div class="col-4">
             <div data-bs-spy="scroll" data-bs-offset="0" class="card text-left p-5" style="height: 710px; overflow-y: scroll;" >
-
                 {% if articulos %}
                     {% for articulo in articulos %}
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="{{ articulo.idArticulo }}">
+                        <input class="form-check-input" type="checkbox" value="1" id="{{ articulo.idArticulo }}" name="{{ articulo.DescProducto }}" onclick="play_checkbox(this)" >
                         <label class="form-check-label" for="{{ articulo.idArticulo }}">
                             {{ articulo.DescProducto }}
                         </label>

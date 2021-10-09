@@ -45,6 +45,9 @@ function add_data_to_graph(idArticulo="idArticulo"){
     }catch(err){
         console.log(err);
         Drawgraphonfront();
+        datasets.push(newDataset);
+        myMainChart.data.datasets.push(newDataset);
+        myMainChart.update();
     }
 }
 
@@ -55,13 +58,13 @@ function Drawgraphonfront(){
     if (typeof myMainChart !== 'undefined'){
         myMainChart.destroy();
     }
-    var dataset0 = create_dataset("Base")
+    // var dataset0 = create_dataset("Base")
 
     myMainChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Magenta'],
-            datasets: [dataset0]
+            datasets: []
         },
         options: {
             scales: {

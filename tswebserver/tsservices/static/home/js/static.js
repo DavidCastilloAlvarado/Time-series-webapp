@@ -180,7 +180,7 @@ function play_checkbox(checkbox){
         // console.log(checkbox.id);
         
         get_forecastdata(checkbox.id)
-        articlesselected.push(checkbox.id)
+        // articlesselected.push(checkbox.id)
         
         //add_data_to_graph(checkbox.name);
     }else{
@@ -191,10 +191,7 @@ function play_checkbox(checkbox){
             }
             n = n +1;
         })
-
     }
-    
-    
 }
 
 async function get_forecast_from_server(payload) {
@@ -209,6 +206,7 @@ async function get_forecast_from_server(payload) {
             statusCode: {
                 200: function () {
                     console.log("Success");
+                    articlesselected.push(payload.id_articulo)
                     //location.reload();
                 },
             },

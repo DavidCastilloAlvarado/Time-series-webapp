@@ -1,5 +1,22 @@
+const csrftoken = getCookie('csrftoken');
 var myMainChart;
 var articlesselected = [];
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 function assert(condition, message) {
     if (!condition) throw new Error(message || "Array length of data and labels must be the same");
@@ -62,7 +79,7 @@ function create_dataset(idArticulo, n=0){
 
 }
 
-function add_data_to_graph(idArticulo="idArticulo"){
+function add_data_to_graph_mockup(idArticulo="idArticulo"){
     if (typeof myMainChart !== 'undefined'){
         var n = myMainChart.data.datasets.length;
     }
@@ -82,6 +99,32 @@ function add_data_to_graph(idArticulo="idArticulo"){
         myMainChart.update();
     }
 }
+
+function add_data_to_graph_production(payload){
+    const n_ahead = payload.ahead;
+    const total_points = payload.data.labels.length;
+    const labels = payload.data.labels;
+    const dataset = payload.data.values;
+    const nameArticle = payload.name;
+
+    const data = create_graph_dataset(dataset, labels, total_points-n_ahead-1, nameArticle)
+
+
+    try{
+        myMainChart.data.datasets.push(data.newDataset);
+        myMainChart.data.labels = data.labels
+        myMainChart.update();
+    }catch(err){
+        console.log(err);
+        Drawgraphonfront();
+        myMainChart.data.datasets.push(data.newDataset);
+        myMainChart.data.labels = data.labels
+        myMainChart.update();
+    }
+
+}
+
+
 
 function Drawgraphonfront(){
 
@@ -135,8 +178,11 @@ function play_checkbox(checkbox){
     var n = 0;
     if (checkbox.checked){
         // console.log(checkbox.id);
+        
+        get_forecastdata(checkbox.id)
         articlesselected.push(checkbox.id)
-        add_data_to_graph(checkbox.name);
+        
+        //add_data_to_graph(checkbox.name);
     }else{
         myMainChart.data.datasets.forEach( item => {
             if (item.label === checkbox.name ){
@@ -149,4 +195,41 @@ function play_checkbox(checkbox){
     }
     
     
+}
+
+async function get_forecast_from_server(payload) {
+        // let spinner = document.getElementById("spinner-home");
+        $.ajax({
+            type: "GET",
+            url: "/api/model/forecast/",
+            data: payload,
+            headers: { 'X-CSRFToken': csrftoken },
+            dataType: "json",
+            encode: true,
+            statusCode: {
+                200: function () {
+                    console.log("Success");
+                    //location.reload();
+                },
+            },
+        }).done(function (data) {
+            console.log(data);
+            add_data_to_graph_production(data)
+            // addentries(data);
+            // spinner.style.display = "none";
+        }).fail(function (data) {
+            // spinner.style.display = "none";
+            console.log("FAIL...");
+            console.log(data);
+        });
+}
+
+async function get_forecastdata(idArticulo ) {
+
+    var payload = {
+        id_articulo: idArticulo,
+        t_ahead: get_n_ahead_option(),
+    }
+    get_forecast_from_server(payload);
+
 }

@@ -1,7 +1,11 @@
 var myMainChart;
-var datasets = [];
+var articlesselected = [];
 function clean_graph(){
     if (typeof myMainChart !== 'undefined'){
+        articlesselected.forEach(idArticulo => {
+            document.getElementById(idArticulo).checked = false;
+         });
+        articlesselected = [];
         myMainChart.destroy();
     }
 }
@@ -19,6 +23,7 @@ function random_color(){
 }
 
 function create_dataset(idArticulo, n=0){
+    const labels = ['2021-01', '2022-02', '2022-03', '2022-04' ,'2022-05']
     const newDataset = {
         label: idArticulo,
         backgroundColor: random_color(),
@@ -26,7 +31,7 @@ function create_dataset(idArticulo, n=0){
         borderWidth: 2,
         data: random_list(5), //[23,45,5,5,],
     };
-    return newDataset
+    return {newDataset, labels}
 }
 
 function add_data_to_graph(idArticulo="idArticulo"){
@@ -36,14 +41,16 @@ function add_data_to_graph(idArticulo="idArticulo"){
     else{
         var n = 0;
     }
-    const newDataset = create_dataset(idArticulo, n);
+    const data = create_dataset(idArticulo, n);
     try{
-        myMainChart.data.datasets.push(newDataset);
+        myMainChart.data.datasets.push(data.newDataset);
+        myMainChart.data.labels = data.labels
         myMainChart.update();
     }catch(err){
         console.log(err);
         Drawgraphonfront();
-        myMainChart.data.datasets.push(newDataset);
+        myMainChart.data.datasets.push(data.newDataset);
+        myMainChart.data.labels = data.labels
         myMainChart.update();
     }
 }
@@ -60,7 +67,7 @@ function Drawgraphonfront(){
     myMainChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Magenta'],
+            labels: [],
             datasets: []
         },
         options: {
@@ -96,11 +103,11 @@ document.addEventListener('readystatechange', event => {
 });
 
 
-
 function play_checkbox(checkbox){
     var n = 0;
     if (checkbox.checked){
         // console.log(checkbox.id);
+        articlesselected.push(checkbox.id)
         add_data_to_graph(checkbox.name);
     }else{
         myMainChart.data.datasets.forEach( item => {

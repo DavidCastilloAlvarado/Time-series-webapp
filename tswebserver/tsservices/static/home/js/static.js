@@ -1,5 +1,15 @@
 var myMainChart;
 var articlesselected = [];
+
+function assert(condition, message) {
+    if (!condition) throw new Error(message || "Array length of data and labels must be the same");
+}
+
+function get_n_ahead_option(){
+    var n_ahead = document.getElementById("AheadFormControlSelect1").value ;
+    return parseInt(n_ahead);
+}
+
 function clean_graph(){
     if (typeof myMainChart !== 'undefined'){
         articlesselected.forEach(idArticulo => {
@@ -22,16 +32,34 @@ function random_color(){
     return "rgb(" + r + "," + g + "," + b + ","+ gamma+ ")";
 }
 
-function create_dataset(idArticulo, n=0){
-    const labels = ['2021-01', '2022-02', '2022-03', '2022-04' ,'2022-05']
+
+function create_graph_dataset(data, labels, forecastpoint, label_title,){
+
+    assert(data.length === labels.length);
+    
+    const forecastline = (ctx, value) =>  ctx.p0.parsed.x >= forecastpoint  ? value : undefined;
     const newDataset = {
-        label: idArticulo,
+        label: label_title,
         backgroundColor: random_color(),
         borderColor: random_color(),
         borderWidth: 2,
-        data: random_list(5), //[23,45,5,5,],
+        data: data, //[23,45,5,5,],
+        segment: {
+            borderDash: ctx => forecastline(ctx, [6, 6]),
+        }
     };
+
     return {newDataset, labels}
+}
+
+function create_dataset(idArticulo, n=0){
+    const n_ahead = get_n_ahead_option() + 1;
+    const total_points = 5;
+    const labels = ['2021-01', '2021-02', '2021-03', '2021-04' ,'2021-05'];
+    const data = random_list(total_points);
+
+    return create_graph_dataset(data, labels, total_points-n_ahead, idArticulo  )
+
 }
 
 function add_data_to_graph(idArticulo="idArticulo"){
@@ -63,7 +91,7 @@ function Drawgraphonfront(){
         myMainChart.destroy();
     }
     // var dataset0 = create_dataset("Base")
-
+    
     myMainChart = new Chart(ctx, {
         type: 'line',
         data: {

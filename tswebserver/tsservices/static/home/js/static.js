@@ -3,7 +3,6 @@ var datasets = [];
 function clean_graph(){
     if (typeof myMainChart !== 'undefined'){
         myMainChart.destroy();
-        datasets = [];
     }
 }
 
@@ -21,7 +20,7 @@ function random_color(){
 
 function create_dataset(idArticulo, n=0){
     const newDataset = {
-        label: idArticulo + ' ' + (n + 1) ,
+        label: idArticulo,
         backgroundColor: random_color(),
         borderColor: random_color(),
         borderWidth: 2,
@@ -39,13 +38,11 @@ function add_data_to_graph(idArticulo="idArticulo"){
     }
     const newDataset = create_dataset(idArticulo, n);
     try{
-        datasets.push(newDataset);
         myMainChart.data.datasets.push(newDataset);
         myMainChart.update();
     }catch(err){
         console.log(err);
         Drawgraphonfront();
-        datasets.push(newDataset);
         myMainChart.data.datasets.push(newDataset);
         myMainChart.update();
     }
@@ -98,12 +95,23 @@ document.addEventListener('readystatechange', event => {
     }
 });
 
+
+
 function play_checkbox(checkbox){
+    var n = 0;
     if (checkbox.checked){
-        console.log(checkbox.id);
+        // console.log(checkbox.id);
         add_data_to_graph(checkbox.name);
     }else{
+        myMainChart.data.datasets.forEach( item => {
+            if (item.label === checkbox.name ){
+                myMainChart.data.datasets.splice(n,1);
+                myMainChart.update();
+            }
+            n = n +1;
+        })
 
     }
+    
     
 }

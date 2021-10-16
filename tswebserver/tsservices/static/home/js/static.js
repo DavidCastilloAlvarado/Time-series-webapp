@@ -1,6 +1,7 @@
 const csrftoken = getCookie('csrftoken');
 var myMainChart;
 var articlesselected = [];
+var pendingqueryes = 0;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -187,6 +188,8 @@ function play_checkbox(checkbox){
         // console.log(checkbox.id);
         
         get_forecastdata(checkbox.id)
+        let spinner = document.getElementById("spinner-home");
+        spinner.style.display = "block";
         // articlesselected.push(checkbox.id)
         
         //add_data_to_graph(checkbox.name);
@@ -202,7 +205,8 @@ function play_checkbox(checkbox){
 }
 
 async function get_forecast_from_server(payload) {
-        // let spinner = document.getElementById("spinner-home");
+        let spinner = document.getElementById("spinner-home");
+        pendingqueryes = pendingqueryes + 1
         $.ajax({
             type: "GET",
             url: "/api/model/forecast/",
@@ -221,9 +225,12 @@ async function get_forecast_from_server(payload) {
             console.log(data);
             add_data_to_graph_production(data)
             // addentries(data);
-            // spinner.style.display = "none";
+            pendingqueryes = pendingqueryes - 1
+            if (pendingqueryes == 0){
+                spinner.style.display = "none";
+            }
         }).fail(function (data) {
-            // spinner.style.display = "none";
+            spinner.style.display = "none";
             console.log("FAIL...");
             console.log(data);
         });

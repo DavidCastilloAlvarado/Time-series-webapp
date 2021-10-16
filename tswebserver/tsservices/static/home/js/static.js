@@ -152,7 +152,14 @@ function Drawgraphonfront(){
                   display: true,
                   text: "Sales Forecast - Empesa X SAC",
                 }
-              }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    }
+                }
+            },
         }
     });
 

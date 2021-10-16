@@ -35,9 +35,11 @@ class ForescastApiView(ViewSet):
     def forecast(self, request):
         income = self.serializer_class(data = request.GET)
         income.is_valid(raise_exception=True)
-        data_forecast, ahead, name = self.forecast_model.forecast(income.data.get('id_articulo'),
-                                                income.data.get('t_ahead'))
-        # TODO: Create a function to calculate the forecast
-        return Response({"data":data_forecast, "ahead":ahead, "name": name}, status=status.HTTP_200_OK)
+        try:
+            data_forecast, ahead, name = self.forecast_model.forecast(income.data.get('id_articulo'),
+                                                    income.data.get('t_ahead'))
+            return Response({"data":data_forecast, "ahead":ahead, "name": name}, status=status.HTTP_200_OK)
+        except Exception as e :
+            return Response(dict(error= str(e)), status=status.HTTP_400_BAD_REQUEST)
 
 homeview = HomeView.as_view()

@@ -151,7 +151,7 @@ function Drawgraphonfront(){
             plugins: {
                 title: {
                   display: true,
-                  text: "Sales Forecast - Empesa X SAC",
+                  text: "Sales Forecast - Empresa X SAC",
                 }
             },
             scales: {

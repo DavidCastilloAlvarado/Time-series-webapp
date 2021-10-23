@@ -38,10 +38,10 @@ class ForescastApiView(ViewSet):
         income = self.serializer_class(data = request.GET)
         income.is_valid(raise_exception=True)
         try:
-            realted_articulos = self.basket_analysis.get_items_related(income.data['id_articulo'])
+            related_articulos = self.basket_analysis.get_items_related(income.data['id_articulo'])
             data_forecast, ahead, name = self.forecast_model.forecast(income.data.get('id_articulo'),
                                                     income.data.get('t_ahead'))
-            return Response({"data":data_forecast, "ahead":ahead, "name": name, "related": realted_articulos}, status=status.HTTP_200_OK)
+            return Response({"data":data_forecast, "ahead":ahead, "name": name, "related": related_articulos}, status=status.HTTP_200_OK)
         except Exception as e :
             return Response(dict(error= str(e)), status=status.HTTP_400_BAD_REQUEST)
 

@@ -11,6 +11,12 @@ import statsmodels.api as sm
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
+class BasketAnalysis:
+    def __init__(self,):
+        self.table = pd.read_csv("tswebserver/utils/database/basket_analysis.csv",)
+
+    def get_items_related(self, idArticulo):
+        return self.table.query(f"antecedents=={idArticulo}")['idArticulo'].tolist()
 
 class ForecastTask:
     def __init__(self,):

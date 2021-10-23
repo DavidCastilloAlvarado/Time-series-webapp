@@ -43,7 +43,7 @@
             <div data-bs-spy="scroll" data-bs-offset="0" class="card text-left p-5" style="height: 710px; overflow-y: scroll;" >
                 {% if articulos %}
                     {% for articulo in articulos %}
-                    <div class="form-check">
+                    <div class="form-check" id="checkbox-{{ articulo.idArticulo }}">
                         <input class="form-check-input" type="checkbox" value="1" id="{{ articulo.idArticulo }}" name="{{ articulo.DescProducto }}" onclick="play_checkbox(this)" >
                         <label class="form-check-label" for="{{ articulo.idArticulo }}">
                             {{ articulo.DescProducto }}

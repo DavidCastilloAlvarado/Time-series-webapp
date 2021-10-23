@@ -110,6 +110,9 @@ function add_data_to_graph_production(payload){
 
     const data = create_graph_dataset(dataset, labels, total_points-n_ahead-1, nameArticle)
 
+    payload.related.forEach(idArticulo => {
+        mark_article_as_related(idArticulo);
+    })
 
     try{
         myMainChart.data.datasets.push(data.newDataset);
@@ -125,7 +128,18 @@ function add_data_to_graph_production(payload){
 
 }
 
+function mark_article_as_related(idArticulo){
+    console.log("checkbox-"+idArticulo)
+    if (document.getElementById("checkbox-"+idArticulo).className !== "form-check bg-warning"){
+        document.getElementById("checkbox-"+idArticulo).className = "form-check bg-warning";
+    };
+}
 
+function unmark_article_as_related(idArticulo){
+    if (document.getElementById("checkbox-"+idArticulo).className === "form-check bg-warning"){
+        document.getElementById("checkbox-"+idArticulo).className = "form-check";
+    };
+}
 
 function Drawgraphonfront(){
 

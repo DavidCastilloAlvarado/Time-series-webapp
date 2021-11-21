@@ -3,29 +3,33 @@
 
 {% block content %}
 
+ 
 <div class="card text-center bg.">
 
     <div class="card-body">
-        <h2 class="card-title ">Welcome</h2>
-        <p class="card-text">Time Series Web Server</p>
         <div class="row">
-            <div class="col">
-                <div>
-                    <a href="#" class="btn btn-danger" onclick="clean_graph()" > x Clear</a>
-                </div>  
-            </div>
+            <!--
             <div class="col">
                 <div class="spinner-border text-primary" role="status" id="spinner-home" style="display: none;">
                     <span class="visually-hidden"></span>
                 </div>
             </div>
+
+            -->
             <div class="col">
-                <label for="exampleFormControlSelect1">T-Ahead</label>
+                <label for="exampleFormControlSelect1">Nro. Meses a Proyectar </label>
+            </div>
+            <div class="col">
                 <select class="form-control" id="AheadFormControlSelect1" onclick="clean_graph()">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
                 </select>
+            </div>
+            <div class="col">
+                <div>
+                    <a href="#" class="btn btn-danger" onclick="clean_graph()" > Limpiar resultados</a>
+                </div>  
             </div>
             
         </div> 
@@ -37,7 +41,7 @@
 
 </div>
 
-<div class="container m-3">
+<div class="card text-center bg.">
     <div class="row">
         <div class="col-4">
             <div data-bs-spy="scroll" data-bs-offset="0" class="card text-left p-5" style="height: 710px; overflow-y: scroll;" >
@@ -54,7 +58,7 @@
             
             </div>
         </div>
-        <div class="col">
+        <div class="col-8">
             <div class="card text-center p-5">
 
                 <canvas id="myChart" width="400px" height="400px"></canvas>
@@ -63,8 +67,10 @@
         </div>
     </div>
 </div>
+<div class="card text-center bg.">
 
-
+    <iframe width="100%" height="673.5" src="https://app.powerbi.com/view?r=eyJrIjoiZDg4ODc4ZjYtZGJlZC00OWIzLTg1M2QtNzA1NjkwYTFmZjBjIiwidCI6IjBlMGNiMDYwLTA5YWQtNDlmNS1hMDA1LTY4YjliNDlhYTFmNiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
+</div>
 
 
 

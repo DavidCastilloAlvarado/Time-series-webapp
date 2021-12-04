@@ -24,7 +24,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 SECRET_KEY = '64x303+@qqd4%7vdh37q9kpp@%t7&1h&lj79k9k4n7f7%v29))'
 
 
-
 ALLOWED_HOSTS = []
 
 
@@ -40,6 +39,7 @@ NATIVE_APPS = [
 
 MY_APPS = [
     'tswebserver.tsservices',
+    'tswebserver.accounts',
 ]
 
 INSTALLED_APPS = NATIVE_APPS + MY_APPS

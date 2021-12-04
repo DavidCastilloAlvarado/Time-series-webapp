@@ -22,8 +22,10 @@ from tswebserver.tsservices.views import homeview
 urlpatterns = [
     re_path(r'^$', homeview, name='homes'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),
+    path('dashboard/', include('tsservices.urls')),
 ]
- 
+
 
 # API URLS
 api_url_patterns = [

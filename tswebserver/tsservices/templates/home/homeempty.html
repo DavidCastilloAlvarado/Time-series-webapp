@@ -1,0 +1,32 @@
+{% extends "./layout/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="card text-center bg.">
+
+    <div class="card-body">
+        <h5 class="card-title">Welcome to the TS Web Server</h5>
+        <p class="card-text">This is the home page of the TS Web Server. You can use this page to test the functionality
+            of the TS Web Server.</p>
+
+    </div>
+    <div class="col m-2">
+        <div>
+            <a href="/dashboard/main" class="btn btn-primary"> Dashboard </a>
+        </div>
+    </div>
+    <div>
+
+        {% load static %}
+        <img rel="icon" type="image/png" src="{% static "home/img/homeimg.jpg" %}" width="700" ">
+
+        {% load static %}
+    </div>
+
+</div>
+
+
+
+{% endblock content %}

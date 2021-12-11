@@ -37,8 +37,10 @@ class MultiTestAccountCases(TestCase):
             username=user.username).exists())
 
     def test_user_login(self,):
+        user = self.create_super_user()
         response = self.login_user()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get('/dashboard/main/', follow=True)
+        self.assertTemplateUsed(response, 'home/home.html')
 
     def test_user_login_fail(self,):
         response = self.client.post('/accounts/logout/')
@@ -51,3 +53,11 @@ class MultiTestAccountCases(TestCase):
         response = self.client.post('/accounts/logout/')
         response = self.client.get('/dashboard/main/', follow=True)
         self.assertContains(response, 'Login')
+
+    def test_login_page_render(self,):
+        response = self.client.get('/accounts/login/', follow=True)
+        self.assertContains(response, 'Login')
+        self.assertContains(response, 'DMPMLG - Pronóstico de la demanda')
+        self.assertContains(response, 'Username')
+        self.assertContains(response, 'Please put your username')
+        self.assertContains(response, 'Password')

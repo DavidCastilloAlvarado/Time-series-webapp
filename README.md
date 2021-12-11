@@ -42,11 +42,11 @@ sudo docker-compose -f local.yml run --rm ts_webservice python manage.py creates
 1. Correr los test para la aplicación Accounts
 
 ```bash
-sudo docker-compose -f local.yml run --rm ts_webservice python manage.py test accounts
+sudo docker-compose -f local.yml run --rm ts_webservice python manage.py test accounts -v 2
 ```
 
 2. Correr los test para la aplicación tsservices
 
 ```bash
-sudo docker-compose -f local.yml run --rm ts_webservice python manage.py test tsservices
+sudo docker-compose -f local.yml run --rm ts_webservice python manage.py test tsservices -v 2
 ```

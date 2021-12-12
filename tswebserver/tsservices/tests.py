@@ -45,6 +45,7 @@ class MultiTestTsServicesCases(TestCase):
         response = self.client.get('/admin/', follow=True)
         self.assertContains(response, 'Django administration')
 
+    # Forecasting
     def test_forecasting_class_data_reading(self,):
         FORECASTTASK = ForecastTask()
         # BASKETA = BasketAnalysis()
@@ -61,14 +62,17 @@ class MultiTestTsServicesCases(TestCase):
         ahead_ = 2
         response, ahead, name = FORECASTTASK.forecast(
             str(data_item['idArticulo']), ahead_)
+
         self.assertTrue('labels' in response)
         self.assertTrue(name in data_item['DescProducto'])
         self.assertTrue(ahead == ahead_)
 
+    # Basket analysis
     def test_basket_analysis_class_data_reading(self,):
         BASKETA = BasketAnalysis()
         data = BASKETA.table.to_dict(orient='records')
         data_item = data[0]
+
         self.assertTrue('antecedents' in data_item)
         self.assertTrue('idArticulo' in data_item)
 
@@ -78,8 +82,10 @@ class MultiTestTsServicesCases(TestCase):
         data_item = data[0]
 
         related = BASKETA.get_items_related(data_item['antecedents'])
+
         self.assertTrue(type(related) == list)
 
+    # Forecasting API
     def test_forecasting_API(self,):
         user = self.create_super_user()
         response = self.login_user()

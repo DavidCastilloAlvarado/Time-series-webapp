@@ -1,5 +1,6 @@
 import environ
 from pathlib import Path
+import os
 """
 Django settings for tswebserver project.
 
@@ -82,6 +83,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST_NAME': os.path.join(BASE_DIR, "test_db.sqlite3"),
     }
 }
 

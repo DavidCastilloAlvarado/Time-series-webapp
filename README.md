@@ -36,3 +36,17 @@ Crea un usuario administrador para todo el sistema.
 ```bash
 sudo docker-compose -f local.yml run --rm ts_webservice python manage.py createsuperuser
 ```
+
+# Test (Unitarios y de Integración)
+
+1. Correr los test para la aplicación Accounts
+
+```bash
+sudo docker-compose -f local.yml run --rm ts_webservice python manage.py test accounts -v 2
+```
+
+2. Correr los test para la aplicación tsservices
+
+```bash
+sudo docker-compose -f local.yml run --rm ts_webservice python manage.py test tsservices -v 2
+```

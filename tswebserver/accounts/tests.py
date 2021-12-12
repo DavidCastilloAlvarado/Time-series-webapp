@@ -6,6 +6,7 @@ import time
 from io import StringIO
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
+from django.test import tag
 
 
 class MultiTestAccountCases(TestCase):
@@ -27,6 +28,7 @@ class MultiTestAccountCases(TestCase):
                                                  self.userdata['password'], )
         return my_admin
 
+    @tag('backend', 'unitario', )
     def test_create_superuser(self,):
         """
         Testea si se creo un superusuario apropiadamente
@@ -36,12 +38,14 @@ class MultiTestAccountCases(TestCase):
         self.assertTrue(User.objects.filter(
             username=user.username).exists())
 
+    @tag('backend', 'unitario', )
     def test_user_login(self,):
         user = self.create_super_user()
         response = self.login_user()
         response = self.client.get('/dashboard/main/', follow=True)
         self.assertTemplateUsed(response, 'home/home.html')
 
+    @tag('frontend', 'integración', )
     def test_user_login_fail(self,):
         response = self.client.post('/accounts/logout/')
         response = self.client.post('/accounts/login/',
@@ -49,11 +53,13 @@ class MultiTestAccountCases(TestCase):
                                           'password': 'anotherthing', })
         self.assertContains(response, 'Login')
 
+    @tag('frontend', 'integración', )
     def test_access_without_login(self,):
         response = self.client.post('/accounts/logout/')
         response = self.client.get('/dashboard/main/', follow=True)
         self.assertContains(response, 'Login')
 
+    @tag('frontend', 'unitario', )
     def test_login_page_render(self,):
         response = self.client.get('/accounts/login/', follow=True)
         self.assertContains(response, 'Login')

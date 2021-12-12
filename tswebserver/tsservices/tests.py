@@ -12,6 +12,7 @@ import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from django.test import tag
 
 USER_DATA = {'username': 'admintest',
              'email': 'admin@admintest.com',
@@ -35,32 +36,36 @@ class MultiTestTsServicesCases(TestCase):
                                                  self.userdata['password'], )
         return my_admin
 
+    @tag('frontend', 'unitario', ))
     def test_landing_page_response(self):
-        response = self.client.get('/')
+        response=self.client.get('/')
         self.assertTemplateUsed(response, 'home/homeempty.html')
         self.assertContains(response, 'Welcome to the TS Web Server')
         self.assertContains(response, 'DMPMLG - Pronóstico de la demanda')
 
+    @ tag('frontend', 'unitario', ))
     def test_admin_page_render(self):
-        response = self.client.get('/admin/', follow=True)
+        response=self.client.get('/admin/', follow=True)
         self.assertContains(response, 'Django administration')
 
     # Forecasting
+    @ tag('backend', 'unitario')
     def test_forecasting_class_data_reading(self,):
-        FORECASTTASK = ForecastTask()
+        FORECASTTASK=ForecastTask()
         # BASKETA = BasketAnalysis()
-        data = FORECASTTASK.articulos.to_dict(orient='records')
-        data_item = data[0]
+        data=FORECASTTASK.articulos.to_dict(orient='records')
+        data_item=data[0]
         self.assertTrue('idArticulo' in data_item)
         self.assertTrue('DescProducto' in data_item)
 
+    @ tag('backend', 'unitario')
     def test_forecasting_class_forescast(self,):
-        FORECASTTASK = ForecastTask()
+        FORECASTTASK=ForecastTask()
         # BASKETA = BasketAnalysis()
-        data = FORECASTTASK.articulos.to_dict(orient='records')
-        data_item = data[0]
-        ahead_ = 2
-        response, ahead, name = FORECASTTASK.forecast(
+        data=FORECASTTASK.articulos.to_dict(orient='records')
+        data_item=data[0]
+        ahead_=2
+        response, ahead, name=FORECASTTASK.forecast(
             str(data_item['idArticulo']), ahead_)
 
         self.assertTrue('labels' in response)
@@ -68,38 +73,41 @@ class MultiTestTsServicesCases(TestCase):
         self.assertTrue(ahead == ahead_)
 
     # Basket analysis
+    @ tag('backend', 'unitario')
     def test_basket_analysis_class_data_reading(self,):
-        BASKETA = BasketAnalysis()
-        data = BASKETA.table.to_dict(orient='records')
-        data_item = data[0]
+        BASKETA=BasketAnalysis()
+        data=BASKETA.table.to_dict(orient='records')
+        data_item=data[0]
 
         self.assertTrue('antecedents' in data_item)
         self.assertTrue('idArticulo' in data_item)
 
+    @ tag('backend', 'unitario')
     def test_basket_analysis_class_related_articulos(self,):
-        BASKETA = BasketAnalysis()
-        data = BASKETA.table.to_dict(orient='records')
-        data_item = data[0]
+        BASKETA=BasketAnalysis()
+        data=BASKETA.table.to_dict(orient='records')
+        data_item=data[0]
 
-        related = BASKETA.get_items_related(data_item['antecedents'])
+        related=BASKETA.get_items_related(data_item['antecedents'])
 
         self.assertTrue(type(related) == list)
 
     # Forecasting API
+    @ tag('backend', 'integración')
     def test_forecasting_API(self,):
-        user = self.create_super_user()
-        response = self.login_user()
+        user=self.create_super_user()
+        response=self.login_user()
 
-        FORECASTTASK = ForecastTask()
+        FORECASTTASK=ForecastTask()
         # BASKETA = BasketAnalysis()
-        data = FORECASTTASK.articulos.to_dict(orient='records')
-        data_item = data[0]
-        ahead_ = 2
-        data = {
+        data=FORECASTTASK.articulos.to_dict(orient='records')
+        data_item=data[0]
+        ahead_=2
+        data={
             'id_articulo': str(data_item['idArticulo']),
             't_ahead': ahead_
         }
-        response = self.client.get('/api/model/forecast/', data)
+        response=self.client.get('/api/model/forecast/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(type(response.data['data']) == dict)
         self.assertTrue(response.data['ahead'] == ahead_)
@@ -109,17 +117,17 @@ class MultiTestTsServicesCases(TestCase):
 
 class UserInterfaceTests(StaticLiveServerTestCase, TestCase):
     # fixtures = ['user-data.json']
-    @classmethod
+    @ classmethod
     def setUp(self):
-        self.located = False
-        my_admin = User.objects.create_superuser(self.userdata['username'],
+        self.located=False
+        my_admin=User.objects.create_superuser(self.userdata['username'],
                                                  self.userdata['email'],
                                                  self.userdata['password'], )
 
-    @classmethod
+    @ classmethod
     def setUpClass(self,):
         super().setUpClass()
-        chrome_options = Options()
+        chrome_options=Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
@@ -127,24 +135,25 @@ class UserInterfaceTests(StaticLiveServerTestCase, TestCase):
         chrome_options.add_argument("--start-maximized")
 
         chrome_options.add_argument("--disable-gpu")
-        self.userdata = USER_DATA
-        self.selenium = webdriver.Chrome(options=chrome_options)
+        self.userdata=USER_DATA
+        self.selenium=webdriver.Chrome(options=chrome_options)
         self.selenium.implicitly_wait(10)
 
-    @classmethod
+    @ classmethod
     def tearDownClass(self):
         self.selenium.quit()
         super().tearDownClass()
 
+    @ tag('integración', 'frontend')
     def test_login(self):
         # user = self.create_super_user()
         # self.assertTrue(User.objects.filter(
         #     username=user.username).exists())
 
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        username_input = self.selenium.find_element_by_name("username")
+        username_input=self.selenium.find_element_by_name("username")
         username_input.send_keys(self.userdata['username'])
-        password_input = self.selenium.find_element_by_name("password")
+        password_input=self.selenium.find_element_by_name("password")
         password_input.send_keys("self.userdata['password']")
 
         # self.selenium.save_screenshot('screenshot.png')
@@ -154,6 +163,7 @@ class UserInterfaceTests(StaticLiveServerTestCase, TestCase):
         self.assertTrue(self.selenium.current_url !=
                         self.live_server_url+'/dashboard/main/')
 
+    @ tag('integración', 'frontend')
     def test_dashboard(self):
         # user = self.create_super_user()
         # self.assertTrue(User.objects.filter(
